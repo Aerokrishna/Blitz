@@ -5,7 +5,7 @@ Odom::Odom(float L, float B, float meter_per_tick) {
     b = B;
     m_per_tick = meter_per_tick;
 }
-
+// pass encx and ency as the number of ticks, current yaw of the robot, and current time in milliseconds
 std::array<float, 6> Odom::get_odom(float encx, float ency, float current_yaw, unsigned long current_millis) {
     unsigned long t_now = current_millis;
     unsigned long dt = t_now - prev_t;

@@ -4,9 +4,9 @@ PID::PID(float KP, float KI, float KD, float IMAX) {
     kp = KP;
     ki = KI;
     kd = KD;
-    imax = IMAX;
+    imax = IMAX; // to prevent integral windup
 }
-
+// pass the error, a scalar value to scale the output, and the current time in milliseconds
 float PID::get_pid(float error, float scalar, unsigned long current_millis) {
     unsigned long t_now = current_millis;
     unsigned long dt = t_now - last_t;

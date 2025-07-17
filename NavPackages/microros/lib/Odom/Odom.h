@@ -3,8 +3,8 @@
 class Odom {
   public:
     Odom(float L, float B, float meter_per_tick); 
-    // L distance between two horizontal wheels
-    // B distance between vertical and horizontal wheels
+    // L perpendicular distance of x wheel encoder from the center
+    // B perpendicular distance of y wheel encoder from the center
     std::array<float, 6> get_odom(float encx, float ency, float current_yaw, unsigned long current_millis);
 
   private:
