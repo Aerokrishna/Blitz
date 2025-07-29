@@ -3,6 +3,7 @@ class PID {
     PID(float KP, float KI, float KD, float IMAX);
     float get_pid(float error, float scalar, unsigned long current_millis);
     void reset_I();
+    void update_gains(float newKp, float newKi, float newKd);
 
   private:
     float kp{0.0f}, ki{0.0f}, kd{0.0f}, imax{0.0f};

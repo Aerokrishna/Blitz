@@ -2,7 +2,7 @@ class MotionProfile {
     public:
         MotionProfile(float current, float target, float time);
         float get_setpoint(unsigned long current_time);
-
+        void reset_profile(float current, float target, float time);
     private:
         float target_point{0.0f}, total_time{0.0f}; 
         float current_point{0.0f};

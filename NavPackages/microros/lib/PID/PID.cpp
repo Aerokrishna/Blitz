@@ -18,8 +18,8 @@ float PID::get_pid(float error, float scalar, unsigned long current_millis) {
         dt = 0.0f;
         integrator = 0.0f;
     }
-
     last_t = t_now; 
+
     // cast it as float for calculations
     float delta_time = static_cast<float>(dt) * 0.001f;
 
@@ -51,6 +51,12 @@ float PID::get_pid(float error, float scalar, unsigned long current_millis) {
     }
 
     return output;
+}
+void PID :: update_gains(float newKp, float newKi, float newKd) {
+    kp = newKp;
+    ki = newKi;
+    kd = newKd;
+    imax = 0.0f;
 }
 
 void PID::reset_I() { integrator = 0.0f; }
