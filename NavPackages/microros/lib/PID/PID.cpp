@@ -1,5 +1,5 @@
 #include "PID.h"
-
+#include "Arduino.h"
 // constructor to initialize pid gians
 PID::PID(float KP, float KI, float KD, float IMAX) {
     kp = KP;
@@ -49,7 +49,7 @@ float PID::get_pid(float error, float scalar, unsigned long current_millis) {
             output += integrator;
         }
     }
-
+    // Serial.println(integrator);
     return output;
 }
 void PID :: update_gains(float newKp, float newKi, float newKd) {

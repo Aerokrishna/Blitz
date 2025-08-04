@@ -1,8 +1,11 @@
+#define MD1_DIR 3 //top_left
+#define MD1_PWM 2 
 
-// #define MD1_DIR 0 //top_left
-// #define MD1_PWM 1 
 
-// #define enc_right_A 12
-// #define enc_right_B 13
-// #define enc_left_A 14
-// #define enc_left_B 15
+#define enc_left_A 5
+#define enc_left_B 4
+
+// #define enc_right_A 26
+// #define enc_right_B 27 
+
+
