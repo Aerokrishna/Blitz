@@ -1,70 +1,93 @@
 #include <Arduino.h>
+#include <serial_parser.hpp>
 #include <PID.h>
 #include <MotionProfile.h>
 #include <include_all.cpp>
 
-#define KP 2.0  // radians
-#define KI 0.0      // milliseconds
+#define KP 1.5  // radians
+#define KI 0.08      // milliseconds
 #define KD 0.0           // milliseconds (loop update rate)
 #define IMAX 100.0
 #define LOOP_DT 20.0
 
-#define TARGET_ANGLE 180  // degrees
+#define TARGET_ANGLE 90  // radians
 #define TOTAL_TIME 5      // milliseconds
-#define LOOP_DT 20           // milliseconds (loop update rate)
 
 MotionProfile profile(0.0f, TARGET_ANGLE, TOTAL_TIME); // Time in seconds
 PID motor_pid(KP, KI, KD, IMAX); // Time in seconds
 
-float target_point = 3.14;
 float current_point = 0.0;
 unsigned long last_update_time = 0;
+float elapsed_time = 0.0;
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial); // wait for serial monitor to open
-    Serial.println("Starting Motion Profile Test...");
+    // while (!Serial); // wait for serial monitor to open
+    // Serial.println("Starting Motion Profile Test...");
+
+    pinMode(MD1_DIR, OUTPUT);
+    pinMode(MD1_PWM, OUTPUT);
+
+    pinMode(enc_left_A, INPUT_PULLUP);
+    pinMode(enc_left_B, INPUT_PULLUP);
+    
+    // gpio_set_irq_enabled_with_callback(enc_right_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
+    gpio_set_irq_enabled_with_callback(enc_left_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
+    // attachInterrupt(digitalPinToInterrupt(enc_left_A),updateEncoder,RISING);
 }
 
 void loop() {
+
+    // delay(100);
+
+    // Receive Data
+    std::vector<uint8_t> payload = receive_data();
+    if (!payload.empty()){
+        std::vector<int16_t> values = parse_int(payload.data(), payload.size());
+
+        float newkp = values[0]/100.f;
+        float newki = values[1]/100.f;
+        float newkd = values[2]/100.f;
+        float newtarget = values[3];
+        float newtime = values[4]/100.f;
+
+        profile.reset_profile(0.0f, newtarget, newtime);
+        motor_pid.update_gains(newkp, newki, newkd);
+        current_angle = 0.0;
+        enc_val_left = 0;
+        elapsed_time = 0.0;
+    }
+    
     unsigned long current_time = millis();
 
     if (current_time - last_update_time >= LOOP_DT) {
         last_update_time = current_time;
         float setpoint = profile.get_setpoint(current_time);
-        float error = setpoint - current_point;
+        float error = setpoint - current_angle;
         float control = motor_pid.get_pid(error, 0.0, current_time);
-        Serial.print(" CONTROL: ");
-        Serial.print(control, 6);  // print with 6 decimal places
-        Serial.print(" SETPOINT: ");
-        Serial.println(setpoint, 6);  // print with 6 decimal places
+        float dir = 1;
+        if (control < 0){
+            dir = 0;
+
+        }
+        elapsed_time += LOOP_DT;
+        
+        digitalWrite(MD1_DIR, dir);
+        analogWrite(MD1_PWM, abs(control));
+        
+        // Send Data
+        int16_t data[] = {(int16_t)(setpoint*100), (int16_t)(current_angle*100), (int16_t)(elapsed_time/10)};
+        uint8_t id = 2;
+        std::vector<uint8_t> buffer = pack_data(data, 3, id);
+        send_data(buffer);
     }
 
-//     if (Serial.available() > 0) {
-
-//     String received = Serial.readStringUntil('\n');
-//     received.trim();  // Remove any leading/trailing whitespace
-
-//     // Split the string using space as delimiter
-//     int firstSpace = received.indexOf(' ');
-//     int secondSpace = received.indexOf(' ', firstSpace + 1);
-
-//     String kp_str = received.substring(0, firstSpace);
-//     String ki_str = received.substring(firstSpace + 1, secondSpace);
-//     String kd_str = received.substring(secondSpace + 1);
-
-//     float Kp = kp_str.toFloat();
-//     float Ki = ki_str.toFloat();
-//     float Kd = kd_str.toFloat();
-//     Serial.print("Received PID -> Kp: ");
-//     Serial.print(Kp);
-//     Serial.print(", Ki: ");
-//     Serial.print(Ki);
-//     Serial.print(", Kd: ");
-//     Serial.println(Kd);
-    
-//     profile.reset_profile(0.0f, 5.00, 30.0);
-//     motor_pid.update_gains(Kp, Ki, Kd);
-
-// }
+    // // parse the id
+    // int8_t id = (int8_t)payload[0];
+    // if (id == 1){
+    //     //id 1 will correspond to an array of 3 integers
+    //     std::vector<int16_t> values = parse_int(payload, sizeof(payload));
+    // }
 }
+
+
