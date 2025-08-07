@@ -1,45 +1,30 @@
 #include <Arduino.h>
+#include <serial_parser.hpp>
 #include <include_all.cpp>
 
-// Global PID parameters
-float Kp = 0.0, Ki = 0.0, Kd = 0.0;
-
 void setup() {
-  Serial.begin(115200);
-  while (!Serial) {
-    ; // Wait until Serial is ready
-  }
-  Serial.println("Pico Ready.");
+    Serial.begin(115200);
+    while (!Serial); // wait for serial monitor to open
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    String received = Serial.readStringUntil('\n');
-    received.trim();  // Remove any leading/trailing whitespace
+    // Send Data
+    float data[] = {1.0, 2.83, 4.56};
+    uint8_t = 2;
+    std::vector<uint8_t> buffer = pack_data(data, 3, id);
+    send_data(buffer);
 
-    // Split the string using space as delimiter
-    int firstSpace = received.indexOf(' ');
-    int secondSpace = received.indexOf(' ', firstSpace + 1);
+    delay(1000);
 
-    if (firstSpace != -1 && secondSpace != -1) {
-      String kp_str = received.substring(0, firstSpace);
-      String ki_str = received.substring(firstSpace + 1, secondSpace);
-      String kd_str = received.substring(secondSpace + 1);
+    // Receive Data
+    uint8_t* payload = receive_data();
 
-      Kp = kp_str.toFloat();
-      Ki = ki_str.toFloat();
-      Kd = kd_str.toFloat();
-
-      // Print the values to confirm
-      Serial.print("Received PID -> Kp: ");
-      Serial.print(Kp);
-      Serial.print(", Ki: ");
-      Serial.print(Ki);
-      Serial.print(", Kd: ");
-      Serial.println(Kd);
-    } else {
-      Serial.println("Invalid input format. Expected: <Kp> <Ki> <Kd>");
+    // parse the id
+    int8_t id = (int8_t)payload[0];
+    if (id == 1){
+        //id 1 will correspond to an array of 3 integers
+        std::vector<int8_t> values = parse_int(payload, sizeof(payload));
     }
-  }
 }
+
 
