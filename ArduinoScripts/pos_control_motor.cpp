@@ -4,13 +4,13 @@
 #include <MotionProfile.h>
 #include <include_all.cpp>
 
-#define KP 1.5  // radians
-#define KI 0.08      // milliseconds
+#define KP 6.0  // radians
+#define KI 0.0      // milliseconds
 #define KD 0.0           // milliseconds (loop update rate)
 #define IMAX 100.0
 #define LOOP_DT 20.0
 
-#define TARGET_ANGLE 90  // radians
+#define TARGET_ANGLE 0  // radians
 #define TOTAL_TIME 5      // milliseconds
 
 MotionProfile profile(0.0f, TARGET_ANGLE, TOTAL_TIME); // Time in seconds
@@ -51,10 +51,9 @@ void loop() {
         float newtarget = values[3];
         float newtime = values[4]/100.f;
 
-        profile.reset_profile(0.0f, newtarget, newtime);
+        profile.reset_profile(current_angle, newtarget, newtime);
         motor_pid.update_gains(newkp, newki, newkd);
-        current_angle = 0.0;
-        enc_val_left = 0;
+
         elapsed_time = 0.0;
     }
     
@@ -82,12 +81,6 @@ void loop() {
         send_data(buffer);
     }
 
-    // // parse the id
-    // int8_t id = (int8_t)payload[0];
-    // if (id == 1){
-    //     //id 1 will correspond to an array of 3 integers
-    //     std::vector<int16_t> values = parse_int(payload, sizeof(payload));
-    // }
 }
 
 
