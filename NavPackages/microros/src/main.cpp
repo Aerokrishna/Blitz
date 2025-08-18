@@ -11,21 +11,35 @@ void setup(){
     while (!Serial); // wait for serial monitor to open
 }
 void loop() {
+    // static InterfaceID interface = -1;
     // Example: serialize struct
-    YourMom original{1.2f, 239};
-    uint8_t buffer[sizeof(YourMom)];
-    std::memcpy(buffer, &original, sizeof(YourMom));
+    std::vector<uint8_t> payload = receive_data();
+    uint8_t id = payload[0];
 
-    // Parse it back
-    YourMom parsed = parse_struct<YourMom>(buffer, sizeof(buffer));
+    if (!payload.empty()){
+        Serial.println(id);
 
-    // receive data
-    std::vector<uint8_t>  payload = receive_data();
-    
-    Serial.print("A :");
-    Serial.print(parsed.a);
-    Serial.print(" B ");
-    Serial.println(parsed.b);
-    // Serial.print(" C ");
-    // Serial.println(parsed.c);
+        if (id == CMD_VEL){
+            CmdVel cmdvel = parse_struct<CmdVel>(payload);
+            
+            Serial.print(" vx : ");
+            Serial.print(cmdvel.vx);
+            Serial.print(" vy : ");
+            Serial.print(cmdvel.vy);
+            Serial.print(" vyaw : ");
+            Serial.println(cmdvel.vyaw);
+        }
+
+        // if (id == ODOM){
+        //     Odometry odom = parse_struct<Odometry>(payload);
+            
+        //     Serial.print(" x : ");
+        //     Serial.print(odom.x);
+        //     Serial.print(" y : ");
+        //     Serial.print(odom.y);
+        //     Serial.print(" theta : ");
+        //     Serial.println(odom.yaw);
+        // }
+    }
+    // delay(1);
 }
