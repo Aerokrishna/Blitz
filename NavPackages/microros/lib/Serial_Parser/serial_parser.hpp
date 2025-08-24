@@ -26,51 +26,94 @@ template<typename T_pack>
 std::vector<uint8_t> pack_data(T_pack data) {
     size_t total_bytes = sizeof(T_pack);
     std::vector<uint8_t> buffer(total_bytes);
-    std::memcpy(&buffer, data, total_bytes);
+    std::memcpy(buffer.data(), &data, total_bytes);
     return buffer;
 }
 
 // SEND OR RECEIVE DATA PACKETS 
 
 // Pass the payload, it will write the data to the serial port
-void send_data(const std::vector<uint8_t>& buffer){
-    if (Serial){
-    Serial.write(buffer.data(), buffer.size());
+void send_data(const std::vector<uint8_t>& buffer) {
+    if (Serial) {
+        uint8_t header = 0xAA;  // example header byte (170 in decimal)
+        Serial.write(&header, 1);                 // send header first
+        Serial.write(buffer.data(), buffer.size()); // send payload
     }
 }
 
+// std::vector<uint8_t> receive_data() {
+//     static std::vector<uint8_t> buffer;
+
+//     while (Serial.available()) {
+//         buffer.push_back(Serial.read());
+
+//         // If we have at least 1 byte, we can check the ID
+//         if (buffer.size() == 1) {
+//             uint8_t id = buffer[0];
+//             size_t expected_size = get_packet_size(id);
+//             if (expected_size == 0) {
+//                 buffer.clear(); // unknown ID
+//             }
+//         }
+
+//         // If we have full packet, return it
+//         if (!buffer.empty()) {
+
+//             uint8_t id = buffer[0];
+//             size_t expected_size = get_packet_size(id);
+//             if (expected_size > 0 && buffer.size() >= expected_size) {
+//                 // Serial.println("GOOD DATA ");
+
+//                 std::vector<uint8_t> packet(buffer.begin(), buffer.begin() + expected_size);
+//                 buffer.erase(buffer.begin(), buffer.begin() + expected_size);
+//                 return packet;
+//             }
+//         }
+//     }
+//     return {};
+// }
 std::vector<uint8_t> receive_data() {
     static std::vector<uint8_t> buffer;
 
+    // Read all available bytes from Serial
     while (Serial.available()) {
         buffer.push_back(Serial.read());
+    }
 
-        // If we have at least 1 byte, we can check the ID
-        if (buffer.size() == 1) {
-            uint8_t id = buffer[0];
-            size_t expected_size = get_packet_size(id);
-            if (expected_size == 0) {
-                buffer.clear(); // unknown ID
-            }
+    // Keep looping until we can return a full packet or buffer is empty
+    while (buffer.size() >= 2) { // Need at least header + ID
+        // Find the header 0xAA
+        if (buffer[0] != 0xAA) {
+            // Header not at start, remove the first byte and continue
+            buffer.erase(buffer.begin());
+            continue;
         }
 
-        // If we have full packet, return it
-        if (!buffer.empty()) {
+        // Check ID
+        uint8_t id = buffer[1];
+        size_t expected_size = get_packet_size(id);
+        if (expected_size == 0) {
+            // Unknown ID, discard header + ID
+            buffer.erase(buffer.begin(), buffer.begin() + 1);
+            continue;
+        }
 
-            uint8_t id = buffer[0];
-            size_t expected_size = get_packet_size(id);
-            if (expected_size > 0 && buffer.size() >= expected_size) {
-                // Serial.println("GOOD DATA ");
-
-                std::vector<uint8_t> packet(buffer.begin(), buffer.begin() + expected_size);
-                buffer.erase(buffer.begin(), buffer.begin() + expected_size);
-                return packet;
-            }
+        // Check if full data is available
+        if (buffer.size() >= 2 + expected_size) {
+            // Extract packet: [ID + DATA] (skip header)
+            std::vector<uint8_t> packet(buffer.begin() + 1, buffer.begin() + 1 + expected_size);
+            // Remove the consumed bytes from buffer (header + packet)
+            buffer.erase(buffer.begin(), buffer.begin() + 1 + expected_size);
+            return packet;
+        } else {
+            // Not enough data yet, wait for more bytes
+            break;
         }
     }
+
+    // No full packet yet
     return {};
 }
-
 
 // std::vector<int16_t> parse_int(uint8_t* payload, unsigned int length) {
 //     if (length % sizeof(int8_t) != 0) {

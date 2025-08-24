@@ -3,20 +3,25 @@ enum PacketID : uint8_t {
     ODOM = 2
 };
 
+#pragma pack(push, 1)
 struct Odometry{
     uint8_t id;
     float x;
     float y;
     float yaw;
-    float vibes;
+    float pitch;
+    float roll;
 };
+#pragma pack(pop)
 
-struct CmdVel{
+#pragma pack(push, 1)
+struct CmdVel {
     uint8_t id;
     float vx;
     float vy;
     float vyaw;
 };
+#pragma pack(pop)
 
 size_t get_packet_size(uint8_t id) {
     switch (id) {
