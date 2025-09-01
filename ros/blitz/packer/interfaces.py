@@ -1,7 +1,7 @@
 from robot_interfaces.msg import CmdVel
 from robot_interfaces.msg import Odom
 from robot_interfaces.msg import PWM
-from std_msgs.msg import Int16
+from std_msgs.msg import Int16, Float32
 from schema import Schema
 schemas = {str : Schema}
 
@@ -26,16 +26,16 @@ schemas = {
         topic="/motor_pwm",
         msg_id=3,
         struct_fmt="h",
-        fields=["data"],
-        ros_msg=Int16,
+        fields=["pwm"],
+        ros_msg=PWM,
         parse=False
     ),
     "time_diff": Schema(
         topic="/time_diff",
         msg_id=3,
         struct_fmt="h",
-        fields=["data"],
-        ros_msg=Int16,
+        fields=["pwm"],
+        ros_msg=PWM,
         parse=True
     ),
 }

@@ -24,8 +24,8 @@ try:
 
             id_byte = ser.read(1)[0]  # already got ID
             if id_byte == 3:  # CMD_VEL
-                data_bytes = ser.read(2)  # 3 floats
-                time_diff = struct.unpack('h', data_bytes)
+                data_bytes = ser.read(4)  # 3 floats
+                time_diff = struct.unpack('f', data_bytes)
                 print(f"{count} ID: {id_byte}, vx: {time_diff}")
 
             elif id_byte == 2:  # ODOM

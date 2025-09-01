@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
 from sensor_msgs.msg import Joy
-# from robot_interfaces.msg import PWM
+from robot_interfaces.msg import PWM
 
 class JoyControl(Node):
     def __init__(self):
@@ -11,21 +10,22 @@ class JoyControl(Node):
 
         # SUBSCRIBERS
         self.joy_sub = self.create_subscription(Joy ,"/joy", self.joy_callback, 10)
-        self.pwm_pub = self.create_publisher(Int16, "/motor_pwm", 10)
-
-        self.create_timer(0.001, self.timer_cb)
+        self.pwm_pub = self.create_publisher(PWM, "/motor_pwm", 10)
+        self.count = 0
+        self.create_timer(0.1, self.timer_cb)
     # joystick subscriber callback
     def joy_callback (self, joy_msg: Joy):
-        msg = Int16()
-        msg.data = int(200*joy_msg.axes[1])
+        msg = PWM()
+        msg.data = 200*joy_msg.axes[1]
         # self.pwm_pub.publish(msg)
         # self.get_logger().info("pubbing pwm")
     
     def timer_cb(self):
-        msg = Int16()
-        msg.data = 100
+        self.count+=1
+        msg = PWM()
+        msg.pwm = self.count
         self.pwm_pub.publish(msg)
-        self.get_logger().info("pubbing pwm")
+        self.get_logger().info(f"{self.count} - pubbing pwm")
 
 def main(args=None):
     rclpy.init(args=args)

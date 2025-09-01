@@ -25,18 +25,19 @@ void loop() {
         if (id == PWM_) {
             motor_pwm = parse_struct<PWM>(payload);
             
-            if (motor_pwm.pwm < 0){
-                digitalWrite(MD1_DIR, 0);
-                analogWrite(MD1_PWM, abs(motor_pwm.pwm));
-            }
-            else {
-                digitalWrite(MD1_DIR, 1);
-                analogWrite(MD1_PWM, abs(motor_pwm.pwm));
-            }
-            send_pwm.pwm = int(t_now-t_prev);
-            send_pwm.id = 3;
+            // if (motor_pwm.pwm < 0){
+            //     digitalWrite(MD1_DIR, 0);
+            //     analogWrite(MD1_PWM, abs(motor_pwm.pwm));
+            // }
+            // else {
+            //     digitalWrite(MD1_DIR, 1);
+            //     analogWrite(MD1_PWM, abs(motor_pwm.pwm));
+            // }
+            // send_pwm.pwm = int(t_now-t_prev);
+            // send_pwm.pwm = motor_pwm.pwm;
+            // send_pwm.id = 3;
 
-            send_data(pack_data<PWM>(send_pwm));
+            send_data(pack_data<PWM>(motor_pwm));
             t_prev = t_now;
         }
     }

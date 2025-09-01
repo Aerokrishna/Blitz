@@ -38,7 +38,7 @@ class SerialSender(Node):
                 return
             packet = schema.pack(msg)
             self.ser.write(packet)
-            # self.get_logger().debug(f"Sent {schema.topic}: {packet.hex()}")
+            self.get_logger().info(f"Writing to Serial {msg}")
         return callback
 
 class SerialReceiver(Node):
