@@ -24,7 +24,6 @@ if(BUILD_TESTING)
 endif()
 install(
   DIRECTORY
-    config
     packer
   DESTINATION
     share/${PROJECT_NAME}/
@@ -32,6 +31,8 @@ install(
 
 install(PROGRAMS
     packer/packer.py
+    packer/joy_motor.py
+
     DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

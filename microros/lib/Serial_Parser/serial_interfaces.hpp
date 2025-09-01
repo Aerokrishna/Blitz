@@ -1,6 +1,7 @@
 enum PacketID : uint8_t {
     CMD_VEL = 1,
-    ODOM = 2
+    ODOM = 2,
+    PWM_ = 3
 };
 
 #pragma pack(push, 1)
@@ -21,10 +22,19 @@ struct CmdVel {
 };
 #pragma pack(pop)
 
+#pragma pack(push, 1)
+struct PWM {
+    uint8_t id;
+    int16_t pwm;
+};  
+#pragma pack(pop)
+
 size_t get_packet_size(uint8_t id) {
     switch (id) {
         case CMD_VEL: return sizeof(CmdVel);
         case ODOM:    return sizeof(Odometry);
+        case PWM_:    return sizeof(Odometry);
+
         default:      return 0; // unknown
     }
 }

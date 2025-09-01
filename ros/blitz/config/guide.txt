@@ -1,2 +1,0 @@
-send : subscribes to ros2 topic, packs data and sends it to the serial port
-receive : reads data from the serial port, unpacks data and publishes to ros2 topic

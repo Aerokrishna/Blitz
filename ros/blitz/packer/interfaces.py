@@ -1,17 +1,19 @@
 from robot_interfaces.msg import CmdVel
 from robot_interfaces.msg import Odom
+from robot_interfaces.msg import PWM
+from std_msgs.msg import Int16
 from schema import Schema
 schemas = {str : Schema}
 
 schemas = {
-    "cmd_vel": Schema(
-        topic="/cmdvel",
-        msg_id=1,
-        struct_fmt="fff",
-        fields=["vx", "vy", "vyaw"],
-        ros_msg=CmdVel,
-        parse=False
-    ),
+    # "cmd_vel": Schema(
+    #     topic="/cmdvel",
+    #     msg_id=1,
+    #     struct_fmt="fff",
+    #     fields=["vx", "vy", "vyaw"],
+    #     ros_msg=CmdVel,
+    #     parse=False
+    # ),
     "odometry": Schema(
         topic="/odom",
         msg_id=2,
@@ -19,5 +21,21 @@ schemas = {
         fields=["x", "y", "yaw"],
         ros_msg=Odom,
         parse=True
-    )
+    ),
+    "motor_pwm": Schema(
+        topic="/motor_pwm",
+        msg_id=3,
+        struct_fmt="h",
+        fields=["data"],
+        ros_msg=Int16,
+        parse=False
+    ),
+    "time_diff": Schema(
+        topic="/time_diff",
+        msg_id=3,
+        struct_fmt="h",
+        fields=["data"],
+        ros_msg=Int16,
+        parse=True
+    ),
 }

@@ -23,10 +23,10 @@ try:
                 continue  # resync
 
             id_byte = ser.read(1)[0]  # already got ID
-            if id_byte == 1:  # CMD_VEL
-                data_bytes = ser.read(12)  # 3 floats
-                vx, vy, vyaw = struct.unpack('fff', data_bytes)
-                print(f"{count} ID: {id_byte}, vx: {round(vx, 3)}, vy: {round(vy,3)}, vyaw: {round(vyaw,3)}")
+            if id_byte == 3:  # CMD_VEL
+                data_bytes = ser.read(2)  # 3 floats
+                time_diff = struct.unpack('h', data_bytes)
+                print(f"{count} ID: {id_byte}, vx: {time_diff}")
 
             elif id_byte == 2:  # ODOM
                 data_bytes = ser.read(12)  # 4 floats

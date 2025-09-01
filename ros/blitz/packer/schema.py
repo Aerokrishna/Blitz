@@ -32,6 +32,3 @@ class Schema:
         for field, value in zip(self.fields, unpacked):
             setattr(msg, field, value)
         return msg
-
-    def size(self):
-        return struct.calcsize("<B" + self.struct)

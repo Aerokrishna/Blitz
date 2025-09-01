@@ -41,8 +41,6 @@ class SerialSender(Node):
             # self.get_logger().debug(f"Sent {schema.topic}: {packet.hex()}")
         return callback
 
-    # def timer_callback(self, schema : Schema):
-
 class SerialReceiver(Node):
     def __init__(self, port="/dev/ttyACM0", baud=115200):
         super().__init__("serial_receiver")
@@ -60,7 +58,7 @@ class SerialReceiver(Node):
         for name, schema in schemas.items():
             if schema.parse:
                 schema.pub = self.create_publisher(schema.ros_msg, schema.topic, 10)
-                self.create_timer(0.1, self.timer_callback(schema))
+                self.create_timer(0.01, self.timer_callback(schema))
                 self.get_logger().info(f"Publishing to {schema.topic}")
 
         self.schema = {s.id: s for s in schemas.values()}
@@ -79,7 +77,7 @@ class SerialReceiver(Node):
     def serial_read(self):
         if not self.ser:
             return
-        
+
         if self.ser.in_waiting >= 1:  
             header = self.ser.read(1)
             if header[0] != 0xAA:

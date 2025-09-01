@@ -4,36 +4,41 @@
 #include <stdexcept>
 #include "include_all.cpp"
 #include "serial_parser.hpp"
-CmdVel cmdvel;
-Odometry odom;
+
+PWM motor_pwm;
+PWM send_pwm;
+unsigned long t_prev = millis();
 
 void setup(){
     Serial.begin(115200);
+    pinMode(MD1_PWM, OUTPUT);
+    pinMode(MD1_DIR, OUTPUT);
+
     // while (!Serial); // wait for serial monitor to open
 }
 void loop() {
     std::vector<uint8_t> payload = receive_data();
-
-    
-    // std::vector<uint8_t> buffer_o = pack_data<Odometry>(odom);
-    // send_data(buffer_o);
-
+    unsigned long t_now = millis();
     if (!payload.empty()) {
         uint8_t id = payload[0];
 
-        if (id == CMD_VEL) {
-            cmdvel = parse_struct<CmdVel>(payload);
-            std::vector<uint8_t> buffer = pack_data<CmdVel>(cmdvel);
-            send_data(buffer);
-        }
-        // if (id == ODOM) {
-        //     odom = parse_struct<Odometry>(payload);
+        if (id == PWM_) {
+            motor_pwm = parse_struct<PWM>(payload);
             
-        // }
-        // Add other IDs here if needed
+            if (motor_pwm.pwm < 0){
+                digitalWrite(MD1_DIR, 0);
+                analogWrite(MD1_PWM, abs(motor_pwm.pwm));
+            }
+            else {
+                digitalWrite(MD1_DIR, 1);
+                analogWrite(MD1_PWM, abs(motor_pwm.pwm));
+            }
+            send_pwm.pwm = int(t_now-t_prev);
+            send_pwm.id = 3;
+
+            send_data(pack_data<PWM>(send_pwm));
+            t_prev = t_now;
+        }
     }
-    odom.id = 2;
-    odom.x = 4.12;
-    std::vector<uint8_t> buffer_o = pack_data<Odometry>(odom);
-    send_data(buffer_o);
+
 }
