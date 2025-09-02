@@ -4,15 +4,20 @@
 #include <stdexcept>
 #include "include_all.cpp"
 #include "serial_parser.hpp"
+#include <Servo.h>
 
 PWM motor_pwm;
 PWM send_pwm;
 unsigned long t_prev = millis();
 
+Servo bldc;
+
 void setup(){
     Serial.begin(115200);
     pinMode(MD1_PWM, OUTPUT);
     pinMode(MD1_DIR, OUTPUT);
+
+    bldc.attach(3);
 
     // while (!Serial); // wait for serial monitor to open
 }
@@ -33,12 +38,7 @@ void loop() {
             //     digitalWrite(MD1_DIR, 1);
             //     analogWrite(MD1_PWM, abs(motor_pwm.pwm));
             // }
-            // send_pwm.pwm = int(t_now-t_prev);
-            // send_pwm.pwm = motor_pwm.pwm;
-            // send_pwm.id = 3;
-
-            send_data(pack_data<PWM>(motor_pwm));
-            t_prev = t_now;
+            bldc.writeMicroseconds(motor_pwm.pwm);
         }
     }
 

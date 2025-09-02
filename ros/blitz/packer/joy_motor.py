@@ -12,13 +12,19 @@ class JoyControl(Node):
         self.joy_sub = self.create_subscription(Joy ,"/joy", self.joy_callback, 10)
         self.pwm_pub = self.create_publisher(PWM, "/motor_pwm", 10)
         self.count = 0
-        self.create_timer(0.1, self.timer_cb)
+        # self.create_timer(0.005, self.timer_cb)
     # joystick subscriber callback
     def joy_callback (self, joy_msg: Joy):
         msg = PWM()
-        msg.data = 200*joy_msg.axes[1]
-        # self.pwm_pub.publish(msg)
-        # self.get_logger().info("pubbing pwm")
+        # dc motor
+        # msg.pwm = int(240*joy_msg.axes[1])
+
+        #bldc motor
+        # 1000->-1 1500->0 2000->1
+        msg.pwm = int(400*joy_msg.axes[1]) + 1500
+
+        self.pwm_pub.publish(msg)
+        self.get_logger().info(f"pubbing pwm {msg.pwm}")
     
     def timer_cb(self):
         self.count+=1

@@ -32,6 +32,7 @@ install(
 install(PROGRAMS
     packer/packer.py
     packer/joy_motor.py
+    packer/parser.py
 
     DESTINATION lib/${PROJECT_NAME}
 )
