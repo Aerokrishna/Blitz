@@ -23,7 +23,7 @@ class SerialSender(Node):
 
         # Create subscriptions
         for name, schema in schemas.items():
-            if not schema.parse:
+            if not schema.from_mcu:
                 self.create_subscription(
                     schema.ros_msg,
                     schema.topic,

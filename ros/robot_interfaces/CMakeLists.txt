@@ -13,6 +13,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/CmdVel.msg"
   "msg/Odom.msg"
   "msg/PWM.msg"
+  "msg/Counter.msg"
+
 )
 ament_export_dependencies(rosidl_default_runtime)
 
