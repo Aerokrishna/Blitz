@@ -1,6 +1,6 @@
 import struct
 
-class Schema:
+class Blitz:
     def __init__(self, topic, msg_id, struct_fmt, fields, ros_msg, from_mcu):
         self.topic = topic
         self.id = msg_id

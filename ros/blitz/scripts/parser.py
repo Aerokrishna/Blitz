@@ -4,14 +4,13 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 import struct
 import serial
-from interfaces import schemas
-from schema import Schema
+from interfaces import blitz_interfaces
 from rclpy.executors import SingleThreadedExecutor
 
 class SerialReceiver(Node):
     def __init__(self, port="/dev/ttyACM0", baud=115200):
         super().__init__("serial_receiver")
-        self.schema = schemas 
+        self.schema = blitz_interfaces 
         
         try:
             self.ser = serial.Serial(port, baud, timeout=1)
@@ -21,12 +20,12 @@ class SerialReceiver(Node):
             self.ser = None
 
         # Create Publisher and Timer
-        for name, schema in schemas.items():
+        for name, schema in blitz_interfaces.items():
             if schema.from_mcu:
                 schema.pub = self.create_publisher(schema.ros_msg, schema.topic, 10)
                 self.get_logger().info(f"Publishing to {schema.topic}")
 
-        self.schema = {s.id: s for s in schemas.values()}
+        self.schema = {s.id: s for s in blitz_interfaces.values()}
 
     def serial_read(self):
         if not self.ser:
