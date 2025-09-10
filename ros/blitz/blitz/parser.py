@@ -4,7 +4,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Imu
 import struct
 import serial
-from interfaces import blitz_interfaces
+from Blitz.ros.blitz.config.interfaces import blitz_interfaces
 from rclpy.executors import SingleThreadedExecutor
 
 class SerialReceiver(Node):

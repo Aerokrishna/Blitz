@@ -24,7 +24,7 @@ T_parse parse_struct(const std::vector<uint8_t>& payload) {
     return result;
 }
 
-// pass the template interface, it will pack the data in the form of the ppayload(byte packet)
+// pass the template interface, it will pack the data in the form of the payload(byte packet)
 template<typename T_pack>
 std::vector<uint8_t> pack_data(T_pack data) {
     size_t total_bytes = sizeof(T_pack);
