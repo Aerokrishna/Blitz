@@ -1,10 +1,6 @@
-#include <iostream>
 #include <vector>
-#include <cstring>  
-#include <stdexcept>
 #include "include_all.cpp"
 #include "serial_parser.hpp"
-#include <Servo.h>
 
 // declared as a global variable 
 Counter count;

@@ -2,11 +2,9 @@
 # subscribes from ros2 topics and packs data to the serial port
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Imu
-import struct
 import serial
 from blitz import Blitz
-from Blitz.ros.blitz.config.interfaces import blitz_interfaces
+from interfaces import blitz_interfaces
 from rclpy.executors import SingleThreadedExecutor
 
 class SerialSender(Node):

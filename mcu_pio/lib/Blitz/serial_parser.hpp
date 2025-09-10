@@ -18,7 +18,7 @@ T_parse parse_struct(const std::vector<uint8_t>& payload) {
     T_parse result;
     uint8_t length = payload.size();
     if (length < sizeof(T_parse)) {
-        Serial.println("BAD DATA");
+        // Serial.println("BAD DATA");
     }
     std::memcpy(&result, payload.data(), sizeof(T_parse));
     return result;
@@ -33,7 +33,6 @@ std::vector<uint8_t> pack_data(T_pack data) {
     return buffer;
 }
 
-
 // SEND OR RECEIVE DATA PACKETS 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -46,6 +45,7 @@ void send_data(const std::vector<uint8_t>& buffer) {
     }
 }
 
+// reveives data and returns the buffer based on the id
 std::vector<uint8_t> receive_data() {
     static std::vector<uint8_t> buffer;
 

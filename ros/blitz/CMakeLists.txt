@@ -13,18 +13,18 @@ find_package(ament_cmake REQUIRED)
 
 install(
   DIRECTORY
-    scripts
+    blitz
+    test
     launch
   DESTINATION
     share/${PROJECT_NAME}/
 )
 
 install(PROGRAMS
-    scripts/packer.py
-    scripts/joy_motor.py
-    scripts/parser.py
-    scripts/counter.py
-
+    blitz/packer.py
+    blitz/parser.py
+    test/joy_motor.py
+    test/counter.py
 
     DESTINATION lib/${PROJECT_NAME}
 )

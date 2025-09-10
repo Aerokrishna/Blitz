@@ -1,3 +1,2 @@
-int enc_val_right = 0;
-int enc_val_left = 0;
-float current_angle = 0.0;
+// this file contains all your global variables
+// must contain constants which store data coming from the computer
