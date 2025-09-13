@@ -1,27 +1,9 @@
-# Blitz
+# Blitz ⚡
 Blitz is a lightweight library for **data transmission between a Python script (or ROS) and a microcontroller**.  
 It lets you easily send structured packets to your MCU and receive data back — whether you want to **visualize it in Python/RViz** or **control hardware like motors** via ROS topics.  
 
 Blitz offers a simple configuration and API, serving as a clean alternative to heavier communication stacks.
  
----
-## Demonstration
-This section will describe the brief demonstration of Blitz provided in this repository. 
-The dependencies to follow along the  are listed as follows :
-Platform IO must be installed
-ROS must be installed, if not skip to the python config tutorial.
-
-### ROS <-> Microcontroller
-make ws, make src, clone the repo inside src
-colcon build outside src
-connect your microcontroller, upload the code through pio uploader, pio package is mcu_pio
-launch the file ros2 launch blitz blitz.launch.py
-echo the topic in another terminal, you will see data coming
-now run another node in some terminal, you will see the data in the topic getting multiplied by 2. 
-
-### Python <-> Microcontroller
-something similar
-
 ---
 
 ## Usage
@@ -199,6 +181,26 @@ void store_data(std::vector<uint8_t> payload) {
 }
 
 ```
+
+---
+## Demonstration
+This section will describe the brief demonstration of Blitz provided in this repository. 
+The dependencies to follow along the  are listed as follows :
+Platform IO must be installed
+ROS must be installed, if not skip to the python config tutorial.
+
+### ROS <-> Microcontroller
+make ws, make src, clone the repo inside src
+colcon build outside src
+connect your microcontroller, upload the code through pio uploader, pio package is mcu_pio
+launch the file ros2 launch blitz blitz.launch.py
+echo the topic in another terminal, you will see data coming
+now run another node in some terminal, you will see the data in the topic getting multiplied by 2. 
+
+### Python <-> Microcontroller
+something similar
+
+---
 
 ## PIO Package
 you can use timer callbacks, include folder structure etc.
