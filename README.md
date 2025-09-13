@@ -6,25 +6,18 @@ Blitz offers a simple configuration and API, serving as a clean alternative to h
  
 ---
 
-## Usage
+## 📖 Usage
 
 This section explains how to configure Blitz for your **custom data transmission** and establish communication with your microcontroller.  
 Depending on your setup, you may be using Blitz with **ROS**, plain **Python**, or directly on the **MCU**.
 
-### ROS2
+### 🤖 ROS2
+In the `ros/` directory provided in this repo you will find two packages, `blitz` and `robot_interfaces`. 
 
-In the `ros/` directory you will find two packages:
-
-- **blitz** → ROS bridge logic  
-- **robot_interfaces** → custom ROS interfaces  
-
+-  **robot_interfaces** → In the `robot_interfaces` package you define your custom interface. Inside the `msg` directory, create your .msg file with the desired interface. Make sure to build and source the repo.
 > ⚠️ Note: Blitz supports ROS interfaces with **single fields** (e.g. `Float32`, `Int32`) but not concatenated ones like `odom.pose.pose.x`. If you need such data, create a **custom ROS interface** with the fields you need.
 
-### ROS 
-In the `ros/` directory provided in this repo you will find two packages, `blitz` and `robot_interfaces`. `robot_interfaces` contains the ROS interfaces used. 
-
--  In the `robot_interfaces` package you define your custom interface. Inside the `msg` directory, create your .msg file with the desired interface. Make sure to build and source the repo.
--  The `blitz` package acts like a bridge between the microcontroller and ROS2 network. Navigate to the file `blitz/blitz/interfaces.py`. These are the following steps for the configuration.
+-  **blitz** → The `blitz` package acts like a bridge between the microcontroller and ROS2 network. Navigate to the file `blitz/blitz/interfaces.py`. These are the following steps for the configuration.
 
 ```python
 
@@ -78,10 +71,10 @@ blitz_interfaces = {
 
 Once this is done, you can build your package and it will be setup to send and receive data to and from the microcontroller. 
 
-### Python
+### 🐍 Python
 coming soon
 
-### MCU
+### 🔌 MCU
 This section is relevant whether or not you are using a pio package. Here we will be addressing the files with respect to the current repo structure. Navigate to `mcu_pio/lib/Blitz/serial_interfaces.hpp`. This is the configuration file for the microcontroller.
 
 ```cpp
@@ -183,7 +176,7 @@ void store_data(std::vector<uint8_t> payload) {
 ```
 
 ---
-## Demonstration
+## 🎬 Demonstration
 This section will describe the brief demonstration of Blitz provided in this repository. 
 The dependencies to follow along the  are listed as follows :
 Platform IO must be installed
