@@ -36,7 +36,6 @@ class SerialReceiver(Node):
                 return  # resync
 
             id_byte = self.ser.read(1)[0]  # already got ID
-            print("SIZE  ", struct.calcsize("="+self.schema[id_byte].struct))
             self.schema[id_byte].payload_data = self.ser.read(struct.calcsize("="+self.schema[id_byte].struct))
 
             data = self.schema[id_byte].payload_data

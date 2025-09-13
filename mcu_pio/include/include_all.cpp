@@ -1,5 +1,8 @@
 // //libraries
 #include <Arduino.h>
+#include <vector>
+#include "serial_parser.hpp"
+#include "blitz_timer.cpp"
 
 // pinmap
 #include "pinmap/PinMap_base.h"
@@ -10,3 +13,5 @@
 // read write
 
 // functions
+#include "functions/store_data.cpp"
+#include "functions/timer_cb.cpp"
