@@ -22,12 +22,12 @@ now run another node in some terminal, you will see the data in the topic gettin
 ### Python <-> Microcontroller
 something similar
 
+---
+
 ## Usage
 
 This section explains how to configure Blitz for your **custom data transmission** and establish communication with your microcontroller.  
 Depending on your setup, you may be using Blitz with **ROS**, plain **Python**, or directly on the **MCU**.
-
----
 
 ### ROS2
 
