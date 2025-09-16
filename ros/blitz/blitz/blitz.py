@@ -27,3 +27,4 @@ class Blitz:
         for field, value in zip(self.fields, unpacked):
             setattr(msg, field, value)
         return msg
+    
