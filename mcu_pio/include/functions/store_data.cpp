@@ -7,7 +7,7 @@ void store_data(std::vector<uint8_t> payload) {
         uint8_t id = payload[0];
     
         // parse the struct based on the id
-        if (id == COUNTER) {
+        if (id == COUNTER_RESPONSE) {
             
             // function to parse the struct
             count = parse_struct<Counter>(payload); // count.a, count.b, count.c, count.d, based on your interface
