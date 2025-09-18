@@ -73,7 +73,10 @@ def send_pid_values():
     total_time = time_slider.get() # time in 0.01s
 
     blitz_interfaces["pid_cmd"].data = [kp, ki, kd, target_angle, total_time]
-    blitz.blitz_write(id=blitz_interfaces["pid_cmd"].id)
+
+    for i in range(2):
+        blitz.blitz_write(id=blitz_interfaces["pid_cmd"].id)
+
     print("SENDING VALUES -", 
           " KP :", kp,
           " KI :", ki,
@@ -90,10 +93,14 @@ def serial_listener():
             blitz.blitz_read()
             
             if blitz_interfaces["pid_feedback"].data != None:
-                print("SETPOINT :  ", blitz_interfaces["pid_feedback"].data[0],
-                      "CURRENT :  ", blitz_interfaces["pid_feedback"].data[1],
-                      "ELAPSED_TIME :  ", blitz_interfaces["pid_feedback"].data[2])
-
+                time.sleep(0.003)
+                print("SETPOINT : ", round(blitz_interfaces["pid_feedback"].data[0],3),
+                      " CURRENT : ", round(blitz_interfaces["pid_feedback"].data[1],3),
+                      " PWM : ", blitz_interfaces["pid_feedback"].data[2],
+                      " ELAPSED_TIME : ", round(blitz_interfaces["pid_feedback"].data[3],3
+                      )
+                    )
+                      
         except Exception as e:
             print(f"Error in serial thread: {e}")
             break
