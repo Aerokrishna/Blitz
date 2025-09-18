@@ -17,4 +17,16 @@ blitz_interfaces = {
         from_mcu=True
     ),
 
+    "pid_cmd": Blitz(
+        msg_id=3,
+        struct_fmt="fffff",
+        from_mcu=False
+    ),
+
+    "pid_feedback": Blitz(
+        msg_id=4,
+        struct_fmt="ffff",
+        from_mcu=True
+    ),
+
 }
