@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: blitz-python
+Version: 0.1.0
+Summary: Serial communication library for MCU ↔ PC
+Author: Krishnapranav B
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/blitz
+Project-URL: Repository, https://github.com/yourusername/blitz
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+Requires-Dist: pyserial
