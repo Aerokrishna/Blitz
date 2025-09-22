@@ -3,7 +3,81 @@ Blitz is a lightweight library for **data transmission between a Python script (
 It lets you easily send structured packets to your MCU and receive data back — whether you want to **visualize it in Python/RViz** or **control hardware like motors** via ROS topics.  
 
 Blitz offers a simple configuration and API, serving as a clean alternative to heavier communication stacks.
- 
+
+---
+## 🎬 Demonstration
+
+This section describes a brief demonstration of **Blitz** using the demo scripts provided in this repository.  
+In this demo, the **computer sends a number every second** to the microcontroller (MCU), and the MCU multiplies it by two and sends it back through serial. We will walk you through how to do this using **ROS** and **Python**.
+
+> ⚠️ **Note:** If you do not have ROS installed, skip the ROS section and proceed directly to the Python demonstration.
+
+---
+
+### 🛠️ Setup Workspace
+
+First, create a workspace and set up the source directory:
+
+```bash
+# Make workspace
+mkdir -p ~/blitz_ws/src
+cd ~/blitz_ws/src
+
+# Clone the repository
+git clone https://github.com/yourusername/blitz-serial.git
+```
+### Setup Microcontroller
+You can use any microcontroller. This library has been tested with Raspberrypi pico, Arduino, Teensy and ESP32. 
+In `blitz_mcu/src` you will find the library, Blitz. Make sure you have it in your microcontroller's workspace and is accessible by your IDE.
+**Flash the microcontroller using the template script available in `blitz_mcu/templates/blitz_demo.cpp`**
+Make sure your board is connected and selected in your IDE / platform.
+
+### ROS <-> Microcontrollers
+Build and source your ROS2 workspace.
+
+```bash
+cd ~/blitz_ws
+colcon build
+source install/setup.bash
+```
+
+Launch Blitz, this establishes the bridge between the microcontroller and the computer.
+```bash
+ros2 launch blitz blitz.launch.py
+```
+
+```bash
+expected output
+```
+
+In another terminal launch the demo script. This script publishes to the topic `/counter`. 
+
+```bash
+ros2 rub blitz blitz_demo
+```
+
+Now we have successfully established communication between the two devices. You can verify this by echoing the topic `/counter` and `counter_response`. `counter` topic contains the numbers published by the demo node. `counter_response` contains the response from the microcontroller, which is the double of the number sent by the computer.
+
+
+### Python <-> Microcontroller
+Install the python package. 
+
+```bash
+cd ~/blitz_ws/src/Blitz/blitz_python/
+pip install e .
+```
+
+Run the python script
+
+```bash
+python demo/blitz_demo.py
+```
+
+```bash
+expected output
+```
+From the print statements on the terminal, we can verify the data being sent to the microcontroller and back.
+
 ---
 
 ## 📖 Usage
@@ -175,23 +249,7 @@ void store_data(std::vector<uint8_t> payload) {
 
 ```
 
----
-## 🎬 Demonstration
-This section will describe the brief demonstration of Blitz provided in this repository. 
-The dependencies to follow along the  are listed as follows :
-Platform IO must be installed
-ROS must be installed, if not skip to the python config tutorial.
 
-### ROS <-> Microcontroller
-make ws, make src, clone the repo inside src
-colcon build outside src
-connect your microcontroller, upload the code through pio uploader, pio package is mcu_pio
-launch the file ros2 launch blitz blitz.launch.py
-echo the topic in another terminal, you will see data coming
-now run another node in some terminal, you will see the data in the topic getting multiplied by 2. 
-
-### Python <-> Microcontroller
-something similar
 
 ---
 
