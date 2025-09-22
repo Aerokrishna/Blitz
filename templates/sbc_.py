@@ -1,1 +1,0 @@
-# ros2 node which will publish and subcribe to the topics configured in the interfaces config

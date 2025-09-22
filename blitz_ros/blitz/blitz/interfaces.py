@@ -1,6 +1,6 @@
+from blitz import Blitz
 from robot_interfaces.msg import Counter
 from std_msgs.msg import Int16
-from blitz import Blitz
 
 blitz_interfaces = {str : Blitz}
 

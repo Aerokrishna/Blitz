@@ -1,5 +1,5 @@
 from robot_interfaces.msg import Counter
-from Blitz.ros.blitz.blitz.blitz import Blitz
+from blitz import Blitz
 
 blitz_interfaces = {str : Blitz}
 
