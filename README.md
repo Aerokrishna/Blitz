@@ -86,7 +86,7 @@ This section explains how to configure Blitz for your **custom data transmission
 Depending on your setup, you may be using Blitz with **ROS**, plain **Python**, or directly on the **MCU**.
 
 ### 🤖 ROS2
-In the `ros/` directory provided in this repo you will find two packages, `blitz` and `robot_interfaces`. 
+In the `blitz_ros/` directory provided in this repo you will find two packages, `blitz` and `robot_interfaces`. 
 
 -  **robot_interfaces** → In the `robot_interfaces` package you define your custom interface. Inside the `msg` directory, create your .msg file with the desired interface. Make sure to build and source the repo.
 > ⚠️ Note: Blitz supports ROS interfaces with **single fields** (e.g. `Float32`, `Int32`) but not concatenated ones like `odom.pose.pose.x`. If you need such data, create a **custom ROS interface** with the fields you need.
@@ -143,10 +143,90 @@ blitz_interfaces = {
 }
 ```
 
-Once this is done, you can build your package and it will be setup to send and receive data to and from the microcontroller. 
+Once this is done, you can build your package and it will be setup to send and receive data to and from the microcontroller. Publish to the topics that have been configured to send the message to the micrcontroller, and subscribe from the topics configured to receive messages from the microcontroller.
+Test your configuration by launching blitz after building and sourcing your workpace.
+
+```bash
+ros2 launch blitz blitz.launch.py
+```
+
+```bash
+expected output
+```
+
 
 ### 🐍 Python
-coming soon
+In the `blitz_python/` directory of this repository, you will find two subdirectories: **`blitz`** and **`examples`**.  
+- The **`blitz`** directory contains the core implementation and imports required to use Blitz Python.  
+- The **`examples`** directory provides demo scripts that showcase how to use the library.  
+
+To install the package, navigate to:  
+
+```bash
+cd ~/blitz_ws/src/Blitz/blitz_python
+pip install -e .
+```
+
+To configure your custom data packets, navigate to `~/blitz_ws/src/Blitz/blitz_python/blitz`
+
+```python
+from .blitz_helper import BlitzInterfaces
+blitz_interfaces = {str : BlitzInterfaces}
+
+# blitz interfaces are written as a dictionary 
+blitz_interfaces = {
+
+    # the key represents the name of the interface and will be used to reference the interface in the script
+    "counter": BlitzInterfaces(
+        # msg id should match the id in the microcontroller
+        msg_id=2,
+
+        # format of the msg packet 
+        # uint8 : B, int8 b, uint16 H, int16 h, uint32 I, int32 i, float32 f
+        struct_fmt="hhff",
+
+        # false if you want to send this interface to the microcontroller,
+        from_mcu=False
+    ),
+
+    "counter_response": BlitzInterfaces(
+
+        # similar configuration as above
+        msg_id=1,
+        struct_fmt="hhff",
+        # true when you want to parse this interface from the microcontroller
+        from_mcu=True
+    ),
+}
+
+```
+
+The below is the walk through of how to use it in a python script.
+
+```python
+from blitz import blitz_interfaces, Blitz
+import time
+
+# initialize
+blitz = Blitz()
+
+while True:
+
+    # fill the data field of the interface
+    blitz_interfaces["counter"].data = [2, 3, 3.4, 5.1]
+
+    # call this function whenver you want to send it to the microcontroller
+    blitz.blitz_write(id=blitz_interfaces["counter"].id)
+
+    time.sleep(0.1)
+
+    # reads the serial port, parses the data and updates the data for each interface
+    blitz.blitz_read()
+
+    # the parsed data can be accessed as an array of items as configured in the interfaces
+    print("DATA :: ", blitz_interfaces["counter_response"].data)
+
+```
 
 ### 🔌 MCU
 This section is relevant whether or not you are using a pio package. Here we will be addressing the files with respect to the current repo structure. Navigate to `mcu_pio/lib/Blitz/serial_interfaces.hpp`. This is the configuration file for the microcontroller.
@@ -221,9 +301,7 @@ count_response.a = 1;
 send_data(pack_data<Counter>(count_response));
 
 ```
-
-An example of the `cpp` code and the interfaces configuration can be found in the
-`templates` directory of the repository. This directory contains an example script `mcu_.pp`to receive data, and send data. The `store_data` function in this script takes the payload or byte array returned by the `receive_data` function and stores the data in the correct variables defined earlier by matching the id of the data received. 
+To receive the messages from the computer and store them in the correct interface msg_ids are matched. The mssage interfaces are referenced by enums in the script. The `store_data` function is the recommended way to convert the raw data returned by the receive data function into the right struc in this script as per the id. Store data function can be used as a callback in order to set flags as it is triggered whenever a new message is received. This function is to be called with receive data and is only required when receiving data from the computer.
 
 ```cpp
 // store data is usually called immediately after receive data function
@@ -249,9 +327,7 @@ void store_data(std::vector<uint8_t> payload) {
 
 ```
 
-
+An example of the `cpp` code and the interfaces configuration can be found in the
+`blitz_mcu/templates` directory of the repository.  This directory contains an example script `blitz_demo.cpp`. 
 
 ---
-
-## PIO Package
-you can use timer callbacks, include folder structure etc.
