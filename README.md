@@ -1,6 +1,6 @@
 # Blitz ⚡
 Blitz is a lightweight library for **data transmission between a Python script (or ROS) and a microcontroller**.  
-It lets you easily send structured packets to your MCU and receive data back — whether you want to **visualize it in Python/RViz** or **control hardware like motors** via ROS topics.  
+It lets you easily send structured packets to your MCU and receive data back — whether you want to **visualize it in Python/RViz** or **control hardware like motors** via ROS topics or just a Python script.
 
 Blitz offers a simple configuration and API, serving as a clean alternative to heavier communication stacks.
 
@@ -56,7 +56,7 @@ In another terminal launch the demo script. This script publishes to the topic `
 ros2 rub blitz blitz_demo
 ```
 
-Now we have successfully established communication between the two devices. You can verify this by echoing the topic `/counter` and `counter_response`. `counter` topic contains the numbers published by the demo node. `counter_response` contains the response from the microcontroller, which is the double of the number sent by the computer.
+Now we have successfully established communication between the two devices. You can verify this by echoing the topic `/counter` and `/counter_response`. `/counter` topic contains the numbers published by the demo node. `/counter_response` contains the response from the microcontroller, which is the double of the number sent by the computer.
 
 
 ### Python <-> Microcontroller
@@ -167,7 +167,7 @@ cd ~/blitz_ws/src/Blitz/blitz_python
 pip install -e .
 ```
 
-To configure your custom data packets, navigate to `~/blitz_ws/src/Blitz/blitz_python/blitz`
+To configure your custom data packets, navigate to `~/blitz_ws/src/Blitz/blitz_python/blitz/interfaces.py`
 
 ```python
 from .blitz_helper import BlitzInterfaces
