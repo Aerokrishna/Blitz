@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstring>  
 #include <stdexcept>
-#include "serial_interfaces.hpp"
+#include "blitz_interfaces.hpp"
 
 // PARSE OR PACK DATA PACKETS
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^

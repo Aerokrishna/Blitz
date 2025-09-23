@@ -9,12 +9,9 @@ while True:
 
     blitz.blitz_read()
 
-    if send:
-        blitz_interfaces["counter"].data = [2, 3, 3.4, 5.1]
-        blitz.blitz_write(id=blitz_interfaces["counter"].id)
+    blitz_interfaces["counter"].data = [2, 3, 3.4, 5.1]
+    blitz.blitz_write(id=blitz_interfaces["counter"].id)
 
-        time.sleep(0.1)
-
-    # else:
+    time.sleep(0.1)
 
     print("DATA :: ", blitz_interfaces["counter_response"].data)
