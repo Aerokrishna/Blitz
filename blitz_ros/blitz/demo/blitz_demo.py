@@ -11,7 +11,7 @@ class CounterPub(Node):
         # SUBSCRIBERS
         self.counter_pub = self.create_publisher(Counter, "/counter", 10)
         self.count = 0.0
-        self.create_timer(0.01, self.counter_cb)
+        self.create_timer(1.0, self.counter_cb)
 
     def counter_cb(self):
         self.count+=1

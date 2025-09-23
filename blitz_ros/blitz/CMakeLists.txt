@@ -14,7 +14,7 @@ find_package(ament_cmake REQUIRED)
 install(
   DIRECTORY
     blitz
-    test
+    demo
     launch
   DESTINATION
     share/${PROJECT_NAME}/
@@ -23,7 +23,7 @@ install(
 install(PROGRAMS
     blitz/packer.py
     blitz/parser.py
-    test/blitz_demo.py
+    demo/blitz_demo.py
 
     DESTINATION lib/${PROJECT_NAME}
 )
