@@ -229,7 +229,7 @@ while True:
 ```
 
 ### 🔌 MCU
-This section is relevant whether or not you are using a pio package. Here we will be addressing the files with respect to the current repo structure. Navigate to `mcu_pio/lib/Blitz/serial_interfaces.hpp`. This is the configuration file for the microcontroller.
+This section is relevant whether or not you are using a pio package. Here we will be addressing the files with respect to the current repo structure. Navigate to `blitz_mcu/src/Blitz/blitz_interfaces.hpp`. This is the configuration file for the microcontroller.
 
 ```cpp
 // 3 steps to add new interface
