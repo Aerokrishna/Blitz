@@ -11,7 +11,9 @@ while True:
 
     blitz_interfaces["counter"].data = [2, 3, 3.4, 5.1]
     blitz.blitz_write(id=blitz_interfaces["counter"].id)
+    print("WRITING DATA :: ", blitz_interfaces["counter"].data)
+
 
     time.sleep(0.1)
 
-    print("DATA :: ", blitz_interfaces["counter_response"].data)
+    print("READING DATA :: ", blitz_interfaces["counter_response"].data)
