@@ -21,6 +21,8 @@ install(
 install(PROGRAMS
     blitz/packer.py
     blitz/parser.py
+    blitz/interfaces.py
+    blitz/blitz.py
     demo/blitz_demo.py
 
     DESTINATION lib/${PROJECT_NAME}
