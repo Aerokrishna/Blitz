@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstring>  
 #include <stdexcept>
-#include "blitz_interfaces.hpp"
+#include "serial_interfaces.hpp"
 
 // PARSE OR PACK DATA PACKETS
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -26,10 +26,12 @@ T_parse parse_struct(const std::vector<uint8_t>& payload) {
 
 // pass the template interface, it will pack the data in the form of the payload(byte packet)
 template<typename T_pack>
-std::vector<uint8_t> pack_data(T_pack data) {
+std::vector<uint8_t> pack_data(T_pack data, uint8_t id) {
     size_t total_bytes = sizeof(T_pack);
     std::vector<uint8_t> buffer(total_bytes);
     std::memcpy(buffer.data(), &data, total_bytes);
+
+    buffer.insert(buffer.begin(), id);
     return buffer;
 }
 
@@ -88,3 +90,20 @@ std::vector<uint8_t> receive_data() {
     // No full packet yet
     return {};
 }
+
+void blitz_print(const std::string& data){
+
+    uint8_t len = static_cast<uint8_t>(data.size());
+
+    // Create a byte buffer: 1 byte for length + string data
+    std::vector<uint8_t> buffer;
+    buffer.reserve(len + 2);
+    uint8_t id = 99;
+    buffer.push_back(id);
+    buffer.push_back(len);
+    buffer.insert(buffer.end(), data.begin(), data.end());
+
+    send_data(buffer);
+}
+
+// {header id len string}

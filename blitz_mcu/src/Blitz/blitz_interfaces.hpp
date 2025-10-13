@@ -1,17 +1,15 @@
 enum PacketID : uint8_t {
-    COUNTER = 1,
-    COUNTER_RESPONSE = 2,
+    COUNTER_RESPONSE = 1,
+    COUNTER = 2,
     
 };
 
 #pragma pack(push, 1)
 struct Counter {
-    uint8_t id;
     int16_t a;
     int16_t b;
     float c;
     float d;
-
 };  
 #pragma pack(pop)
 
