@@ -91,7 +91,7 @@ std::vector<uint8_t> receive_data() {
     return {};
 }
 
-void blitz_print(const std::string& data){
+void debug_state(const std::string& data){
 
     uint8_t len = static_cast<uint8_t>(data.size());
 
