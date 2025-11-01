@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cstring>  
 #include <stdexcept>
-#include "serial_interfaces.hpp"
+#include "blitz_interfaces.hpp"
 
 // PARSE OR PACK DATA PACKETS
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -14,12 +14,9 @@
 
 // pass the payload(byte packet), from receive_data function , parse it in the form of template interface
 template<typename T_parse>
-T_parse parse_struct(const std::vector<uint8_t>& payload) {
+T_parse parse_struct(std::vector<uint8_t>& payload) {
     T_parse result;
-    uint8_t length = payload.size();
-    if (length < sizeof(T_parse)) {
-        // Serial.println("BAD DATA");
-    }
+    payload.erase(payload.begin());
     std::memcpy(&result, payload.data(), sizeof(T_parse));
     return result;
 }
