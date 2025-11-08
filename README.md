@@ -53,7 +53,7 @@ expected output
 In another terminal launch the demo script. This script publishes to the topic `/counter`. 
 
 ```bash
-ros2 rub blitz blitz_demo
+ros2 run blitz blitz_demo
 ```
 
 Now we have successfully established communication between the two devices. You can verify this by echoing the topic `/counter` and `/counter_response`. `/counter` topic contains the numbers published by the demo node. `/counter_response` contains the response from the microcontroller, which is the double of the number sent by the computer.
